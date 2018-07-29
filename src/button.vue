@@ -1,9 +1,32 @@
 <template>
-    <button class="l-button">button2</button>
+    <button class="l-button" :class="{[`icon-${iconPosition}`]: true}">
+        <l-icon class="icon" v-if="icon" :name="icon"></l-icon>
+        <div class="content">
+            <slot></slot>
+        </div>
+    </button>
 </template>
 
 <script>
-	export default {}
+    import Icon from './icon'
+	export default {
+		props: {
+			icon: {},
+			iconPosition: {
+				type: String,
+                default: 'left',
+                validator (value) {
+					if (value !== 'left' && value !== 'right') {
+						console.warn(`iconPosition的值为 ${value} 无法匹配`)
+                		return false
+                    } else {
+                		return true
+                    }
+                }
+            }
+        },
+        components: {Icon}
+    }
 </script>
 
 <style scoped lang="scss">
@@ -29,8 +52,27 @@
         &:focus {
             outline: none;
         }
-    }
+        > .icon{
+            order: 1;
+            margin-right: .3em;
+        }
+        > .content{
+            order: 2;
+        }
+        &.icon-left{
 
+        }
+        &.icon-right{
+            > .icon{
+                order: 2;
+                margin-left: .3em;
+                margin-right: 0;
+            }
+            > .content {
+                order: 1;
+            }
+        }
+    }
 
 
 </style>
